@@ -1,0 +1,214 @@
+from random import *
+
+print('Welcome to Tic Tac Toe!')
+#Write a function that can print out a board. Set up your board as a list, where each index 1-9 corresponds with a
+# number on a number pad, so you get a 3 by 3 board representation.
+def display_board(board):
+    print "----------"
+    print board[0],"|",board[1],"|",board[2]
+    print "----------"
+    print board[3],"|",board[4],"|",board[5]
+    print "----------"
+    print board[6],"|",board[7],"|",board[8]
+    print "----------"
+
+game_board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+display_board(game_board)
+
+# function that can take in a player input and assign their marker as 'X' or 'O'.
+def player_input():
+    user_plays = raw_input("\nPlayer 1, will you be X or O: ")
+    while user_plays <> 'X' and user_plays <> 'O':
+        user_plays = raw_input('try again, choose X or O: ')
+    return user_plays
+
+#Write a function that takes, in the board list object, a marker ('X' or 'O'),
+# and a desired position (number 1-9) and assigns it to the board.
+def place_marker(board, marker, position):
+        board[position] = marker
+        display_board(board)
+
+
+#Write a function that takes in a board and a mark (X or O) and then checks to see if that mark has won.
+def win_check(board, mark):
+    win = False
+    for spots in board:
+        if spots == mark:
+            if spots == board[0]:
+                if board[1] == mark and board[2] == mark:
+                    win = True
+                elif board[3] == mark and board[6] == mark:
+                    win = True
+                elif board[4] == mark and board[8] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[1]:
+                if board[0] == mark and board[2] == mark:
+                    win = True
+                elif board[4] == mark and board[7] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[2]:
+                if board[5] == mark and board[8] == mark:
+                    win = True
+                elif board[0] == mark and board[1] == mark:
+                    win = True
+                elif board[4] == mark and board[6] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[3]:
+                if board[0] == mark and board[6] == mark:
+                    win = True
+                elif board[4] == mark and board[5] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[4]:
+                if board[6] == mark and board[2] == mark:
+                    win = True
+                elif board[1] == mark and board[7] == mark:
+                    win = True
+                elif board[3] == mark and board[5] == mark:
+                    win = True
+                elif board[0] == mark and board[8] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[5]:
+                if board[2] == mark and board[8] == mark:
+                    win = True
+                elif board[4] == mark and board[3] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[6]:
+                if board[0] == mark and board[3] == mark:
+                    win = True
+                elif board[7] == mark and board[8] == mark:
+                    win = True
+                elif board[4] == mark and board[2] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[7]:
+                if board[4] == mark and board[1] == mark:
+                    win = True
+                elif board[6] == mark and board[8] == mark:
+                    win = True
+                else:
+                    pass
+            elif spots == board[8]:
+                if board[2] == mark and board[5] == mark:
+                    win = True
+                elif board[7] == mark and board[6] == mark:
+                    win = True
+                elif board[4] == mark and board[0] == mark:
+                    win = True
+                else:
+                    pass
+            else:
+                pass
+    return win
+
+#function that checks if the board is full and returns a boolean value. True if full, False otherwise.
+def full_board_check(board):
+    full = True;
+
+    for spots in board:
+        if spots <> 'X' and spots <> 'O':
+            full = False
+
+    return full
+
+#function that returns a boolean indicating whether a space on the board is freely available.
+def space_check(board, position):
+    if board[position] < 9:
+        return True
+    else:
+        return False
+
+#function that asks for a player's next position (as a number 1-9) and then uses the function from
+# step 6 to check if its a free position. If it is, then return the position for later use.
+def player_choice(board):
+    nexturn = False
+    while nexturn == False:
+        choice = raw_input('Where do you want to play your piece ? (Enter # between 0-8): ')
+        if space_check(board,int(choice)):
+            nexturn = True
+            return int(choice)
+        else:
+            print 'Space is Filled try another spot'
+
+def replay():
+    replay_game = raw_input('Do you want to play again ? (Y or N): ')
+    if replay_game == 'Y':
+        return True
+    elif replay_game == 'N':
+        return False
+
+
+
+
+# Call Player assignment function for Player 1 and assign appropriate marker to Player 2
+p_one = player_input()
+
+if p_one == 'X':
+    p_two = 'O'
+elif p_one == 'O':
+    p_two = 'X'
+else:
+    pass
+
+print '\nPlayer 1 will be ',p_one,' \nPlayer 2 will be ',p_two
+
+first_player = randint(1,2)
+
+if first_player == 1:
+    n = p_one
+    m = p_two
+elif first_player == 2:
+    n = p_two
+    m = p_one
+
+print '\nAfter Randomly choosing, ',n, ' will go first !'
+game_on = True
+turn = 1
+
+while game_on:
+
+    if turn%2 == 1:
+        print '\n', n, ' Its your turn'
+        place_marker(game_board, n, player_choice(game_board))
+        turn += 1
+        if win_check(game_board, n):
+            print 'Player ', n, ' has won'
+            game_on = False
+    elif turn%2 == 0:
+        print '\n', m, ' Its your turn'
+        place_marker(game_board, m, player_choice(game_board))
+        turn += 1
+        if win_check(game_board, m):
+            print 'Player ', m, ' has won'
+            game_on = False
+
+    if full_board_check(game_board):
+        print 'The Board is Full and the game is TIED !'
+        game_on = False
+        turn = 1
+
+    if not game_on:
+        if replay():
+            print '\nYou have decided to play again.'
+            game_board = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            display_board(game_board)
+            game_on = True
+            turn = 1
+        else:
+            game_on = False
+            break
+
+print '\nEnd Of Game Goodbye'
+
